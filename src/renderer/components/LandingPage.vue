@@ -165,7 +165,7 @@ export default {
 }
 
 .el-upload:hover {
-  box-shadow: 8px 8px 8px 0 rgba(232, 237, 250, 0.6);
+  box-shadow: 8px 8px 8px 0 #aaa;
   border: 1px dashed #1989fa;
 }
 

@@ -1,12 +1,12 @@
 const state = {
-  templateId: 1,
+  template: '',
   layout: '',
   options: {}
 }
 
 const mutations = {
-  SET_TEMP_ID: (state, id) => {
-    state.templateId = id
+  SET_TEMP: (state, template) => {
+    state.template = template
   },
   SET_LAYOUT: (state, layout) => {
     state.layout = layout
@@ -17,8 +17,8 @@ const mutations = {
 }
 
 const actions = {
-  setTemplateId({ commit }, id) {
-    commit('SET_TEMP_ID', id)
+  setTemplate({ commit }, template) {
+    commit('SET_TEMP', template)
   },
   setLayout({ commit }, layout) {
     commit('SET_LAYOUT', layout)
@@ -29,7 +29,7 @@ const actions = {
 }
 
 const getters = {
-  templateId: state => state.templateId,
+  template: state => state.template,
   layout: state => state.layout,
   options: state => state.options
 }

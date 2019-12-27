@@ -1,6 +1,6 @@
-# limbo-vs
+# vs-generator
 
-> dvcs vs
+> a visualization generator for dvcs
 
 #### Build Setup
 

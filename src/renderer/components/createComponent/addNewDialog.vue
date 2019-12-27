@@ -1,62 +1,84 @@
 <template>
   <el-dialog class="dialog" title="选择布局" :visible="dialogVisible" @close="closeDialog" width="80%">
     <div class="flex_wrapper">
-      <div class="flex_item" @click="editLayout(1)">
-        <template1 hideTip></template1>
-      </div>
-      <div class="flex_item" @click="editLayout(2)">
-        <template2 hideTip></template2>
-      </div>
-      <div class="flex_item" @click="editLayout(3)">
-        <template3 hideTip></template3>
-      </div>
-      <div class="flex_item" @click="editLayout(4)">
-        <template4 hideTip></template4>
-      </div>
-      <div class="flex_item" @click="editLayout(5)">
-        <template5 hideTip></template5>
-      </div>
-      <div class="flex_item" @click="editLayout(6)">
-        <template6 hideTip></template6>
-      </div>
-      <div class="flex_item" @click="editLayout(7)">
-        <template7 hideTip></template7>
+      <div class="flex_item" @click="editLayout([])">空白页</div>
+      <div
+        class="flex_item"
+        v-for="(layout,index) in layouts"
+        :key="index"
+        @click="editLayout(layout)"
+      >
+        <grid-layout
+          :layout="layout"
+          :col-num="24"
+          :row-height="10"
+          :is-draggable="false"
+          :is-resizable="false"
+          :verticalCompact="false"
+          :margin="[1, 1]"
+        >
+          <grid-item
+            v-for="item in layout"
+            :x="item.x"
+            :y="item.y"
+            :w="item.w"
+            :h="item.h"
+            :i="item.i"
+            :key="item.i"
+          >{{item.i}}</grid-item>
+        </grid-layout>
       </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import template1 from '../templates/template1'
-import template2 from '../templates/template2'
-import template3 from '../templates/template3'
-import template4 from '../templates/template4'
-import template5 from '../templates/template5'
-import template6 from '../templates/template6'
-import template7 from '../templates/template7'
+import VueGridLayout from 'vue-grid-layout'
 
 export default {
   components: {
-    'template1': template1,
-    'template2': template2,
-    'template3': template3,
-    'template4': template4,
-    'template5': template5,
-    'template6': template6,
-    'template7': template7
+    GridLayout: VueGridLayout.GridLayout,
+    GridItem: VueGridLayout.GridItem
   },
   props: ['dialogVisible'],
   data() {
     return {
-
+      layouts: [
+        [
+          { 'x': 0, 'y': 0, 'w': 24, 'h': 18, 'i': '1' }
+        ],
+        [
+          { 'x': 0, 'y': 0, 'w': 12, 'h': 18, 'i': '1' },
+          { 'x': 12, 'y': 0, 'w': 12, 'h': 18, 'i': '2' }
+        ],
+        [
+          { 'x': 0, 'y': 0, 'w': 8, 'h': 18, 'i': '1' },
+          { 'x': 8, 'y': 0, 'w': 8, 'h': 18, 'i': '2' },
+          { 'x': 16, 'y': 0, 'w': 8, 'h': 18, 'i': '3' }
+        ],
+        [
+          { 'x': 0, 'y': 0, 'w': 12, 'h': 9, 'i': '1' },
+          { 'x': 12, 'y': 0, 'w': 12, 'h': 9, 'i': '2' },
+          { 'x': 0, 'y': 9, 'w': 12, 'h': 9, 'i': '3' },
+          { 'x': 12, 'y': 9, 'w': 12, 'h': 9, 'i': '4' }
+        ],
+        [
+          { 'x': 0, 'y': 0, 'w': 8, 'h': 9, 'i': '1' },
+          { 'x': 8, 'y': 0, 'w': 8, 'h': 9, 'i': '2' },
+          { 'x': 16, 'y': 0, 'w': 8, 'h': 9, 'i': '3' },
+          { 'x': 0, 'y': 9, 'w': 8, 'h': 9, 'i': '4' },
+          { 'x': 8, 'y': 9, 'w': 8, 'h': 9, 'i': '5' },
+          { 'x': 16, 'y': 9, 'w': 8, 'h': 9, 'i': '6' }
+        ]
+      ]
     }
   },
   methods: {
     closeDialog() {
       this.$emit('update:dialogVisible', false)
     },
-    editLayout(val) {
-      this.$store.dispatch('common/setTemplateId', val)
+    editLayout(layout) {
+      this.$store.dispatch('common/setTemplate', layout)
       this.$router.push({ path: 'layout' })
     }
   }
@@ -86,26 +108,8 @@ export default {
   border: 1px dashed #1989fa;
 }
 
-.component_index {
-  margin: auto;
-  font-size: 40px;
-}
-
-.layout {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex: 1;
-}
-
-.box {
-  background: rgba(199, 199, 199, 0.5);
-  display: flex;
-  flex: 1;
-  margin: 1px;
-}
-
-.column_flex {
-  flex-direction: column;
+.vue-grid-item {
+  background: #dddddd;
+  text-align: center;
 }
 </style>

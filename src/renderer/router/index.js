@@ -21,6 +21,11 @@ export default new Router({
       component: require('@/components/createComponent/showcase').default
     },
     {
+      path: '/test',
+      name: 'test',
+      component: require('@/components/createComponent/test').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
