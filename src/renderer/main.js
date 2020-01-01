@@ -4,7 +4,10 @@ import axios from 'axios'
 import App from './App'
 import router from './router'
 import store from './store'
-import { Button, Select, Dialog, Container, Header, Main, Aside, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip } from 'element-ui'
+import {
+  Button, Select, Dialog, Container, Header, Main, Aside, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip,
+  Input, Form, FormItem, Image, Loading, Notification
+} from 'element-ui'
 
 import './assets/iconfont'
 
@@ -26,6 +29,16 @@ Vue.use(MenuItemGroup)
 Vue.use(Submenu)
 Vue.use(Main)
 Vue.use(Tooltip)
+Vue.use(Input)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Image)
+Vue.use(Loading)
+
+Vue.use(Loading.directive)
+
+Vue.prototype.$loading = Loading.service
+Vue.prototype.$notify = Notification
 
 /* eslint-disable no-new */
 new Vue({

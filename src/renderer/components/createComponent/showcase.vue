@@ -1,25 +1,24 @@
 <template>
   <grid-layout
-    :layout="layout"
+    :layout="project.layout"
     :col-num="24"
     :row-height="rowHeight"
     :is-draggable="false"
     :is-resizable="false"
     :verticalCompact="false"
-    :use-css-transforms="true"
+    :use-css-transforms="false"
     :margin="[0, 0]"
-    ref="layout"
   >
     <grid-item
-      v-for="item in layout"
-      :ref="`item${item.i}`"
+      v-for="item in project.layout"
+      :ref="`item_${item.i}`"
       :x="item.x"
       :y="item.y"
       :w="item.w"
       :h="item.h"
       :i="item.i"
       :key="item.i"
-    >{{item.i}}</grid-item>
+    ></grid-item>
   </grid-layout>
 </template>
 
@@ -36,7 +35,14 @@ export default {
   data() {
     return {
       rowHeight: 0,
-      charts: {}
+      charts: {},
+      project: {
+        id: 0,
+        name: '',
+        layout: [],
+        options: {},
+        image: ''
+      }
     }
   },
   mounted() {
@@ -56,30 +62,24 @@ export default {
       }
     })
     observer.observe(document.querySelector('.vue-grid-layout'), { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
-  },
-  computed: {
-    options: function () {
-      return this.$store.getters['common/options']
-    },
-    layout: function () {
-      return JSON.parse(JSON.stringify(this.$store.getters['common/layout']))
-    }
+
+    //获取project
+    this.project = this.$store.getters['common/project']
   },
   methods: {
     computHeight() {
       this.rowHeight = window.innerHeight / 18
     },
     resizeChart() {
-      for (let index in this.charts) {
-        this.charts[index].resize()
+      for (let id in this.charts) {
+        this.charts[id].resize()
       }
     },
     init() {
-      for (let index in this.options) {
-        let chart = echarts.init(this.$refs[`item${index}`][0].$el
-          , 'dark')
-        chart.setOption(this.options[index])
-        this.charts[index] = chart
+      for (let id in this.project.options) {
+        let chart = echarts.init(this.$refs[`item_${id}`][0].$el, 'dark')
+        chart.setOption(this.project.options[id])
+        this.charts[id] = chart
       }
     }
   }
@@ -87,20 +87,7 @@ export default {
 </script>
 
 <style scoped>
-.layout {
-  display: flex;
-  width: 100%;
-  flex: 1;
-}
-
-.box {
-  background: rgba(199, 199, 199, 0.5);
-  display: flex;
-  flex: 1;
-  margin: 0 !important;
-}
-
-.column_flex {
-  flex-direction: column;
+.vue-grid-layout {
+  overflow: hidden;
 }
 </style>

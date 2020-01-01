@@ -11,9 +11,9 @@ export default new Router({
       component: require('@/components/LandingPage').default
     },
     {
-      path: '/layout',
+      path: '/project',
       name: 'edit-layout',
-      component: require('@/components/createComponent/editLayout').default
+      component: require('@/components/createComponent/project').default
     },
     {
       path: '/showcase',
