@@ -79,9 +79,6 @@
 import VueGridLayout from 'vue-grid-layout'
 import { GenNonDuplicateID } from '../../helper'
 
-const { remote } = require('electron')
-const { Menu } = remote
-
 export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -122,9 +119,13 @@ export default {
       this.addNew = true
     },
     contextmenuLayouts(id) {
-      this.LayoutContextTemplate.forEach(menu => { menu.id = id })
-      const menu = Menu.buildFromTemplate(this.LayoutContextTemplate)
-      menu.popup({ window: remote.getCurrentWindow() })
+      if (!process.env.IS_WEB) {
+        const { remote } = require('electron')
+        const { Menu } = remote
+        this.LayoutContextTemplate.forEach(menu => { menu.id = id })
+        const menu = Menu.buildFromTemplate(this.LayoutContextTemplate)
+        menu.popup({ window: remote.getCurrentWindow() })
+      }
     },
     editLayout(id) {
       this.newLayout = JSON.parse(JSON.stringify(this.cusLayouts.find(o => o.id === id))) //实现深拷贝，后续如果有其他属性，可能需要修改实现方式
@@ -137,9 +138,13 @@ export default {
       this.newLayout.data.push({ 'x': 0, 'y': 0, 'w': 12, 'h': 9, 'i': GenNonDuplicateID() })
     },
     contextmenuBox(id) {
-      this.BoxContextTemplate.forEach(menu => { menu.id = id })
-      const menu = Menu.buildFromTemplate(this.BoxContextTemplate)
-      menu.popup({ window: remote.getCurrentWindow() })
+      if (!process.env.IS_WEB) {
+        const { remote } = require('electron')
+        const { Menu } = remote
+        this.BoxContextTemplate.forEach(menu => { menu.id = id })
+        const menu = Menu.buildFromTemplate(this.BoxContextTemplate)
+        menu.popup({ window: remote.getCurrentWindow() })
+      }
     },
     deleteBox(id) {
       let index = this.newLayout.data.findIndex(o => o.i === id)

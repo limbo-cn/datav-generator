@@ -70,6 +70,13 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@babel/runtime@^7.5.5":
+  version "7.7.7"
+  resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.7.7.tgz#194769ca8d6d7790ec23605af9ee3e42a0aa79cf"
+  integrity sha1-GUdpyo1td5DsI2Ba+e4+QqCqec8=
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.npm.taobao.org/@babel/template/download/@babel/template-7.0.0-beta.44.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Ftemplate%2Fdownload%2F%40babel%2Ftemplate-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
@@ -194,6 +201,53 @@
   version "1.7.3"
   resolved "https://registry.npm.taobao.org/@interactjs/utils/download/@interactjs/utils-1.7.3.tgz#2dbbf75fd777a0d4d769fcab0ec13c790d4b6df4"
   integrity sha1-Lbv3X9d3oNTXafyrDsE8eQ1LbfQ=
+
+"@jiaminghi/bezier-curve@*":
+  version "0.0.9"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/bezier-curve/download/@jiaminghi/bezier-curve-0.0.9.tgz#5196aca93c8b061a612b4c3eabcedf9490cef6ee"
+  integrity sha1-UZasqTyLBhphK0w+q87flJDO9u4=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+
+"@jiaminghi/c-render@*":
+  version "0.4.3"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/c-render/download/@jiaminghi/c-render-0.4.3.tgz#982ebd8f71b443bb9507834227834973ebd9b6d8"
+  integrity sha1-mC69j3G0Q7uVB4NCJ4NJc+vZttg=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "@jiaminghi/bezier-curve" "*"
+    "@jiaminghi/color" "*"
+    "@jiaminghi/transition" "*"
+
+"@jiaminghi/charts@*":
+  version "0.2.10"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/charts/download/@jiaminghi/charts-0.2.10.tgz#8a5570129d8147606c5aec05ff1c74e70b4486be"
+  integrity sha1-ilVwEp2BR2BsWuwF/xx05wtEhr4=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "@jiaminghi/c-render" "*"
+
+"@jiaminghi/color@*":
+  version "0.1.1"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/color/download/@jiaminghi/color-0.1.1.tgz#bddf9012dfce6982d3829a983ffeb91ee9dda7b6"
+  integrity sha1-vd+QEt/OaYLTgpqYP/65Hundp7Y=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+
+"@jiaminghi/data-view@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/data-view/download/@jiaminghi/data-view-2.6.0.tgz#3447956fd70e40ead09e476609b283c0023e3a09"
+  integrity sha1-NEeVb9cOQOrQnkdmCbKDwAI+Ogk=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "@jiaminghi/charts" "*"
+
+"@jiaminghi/transition@*":
+  version "1.1.11"
+  resolved "https://registry.npm.taobao.org/@jiaminghi/transition/download/@jiaminghi/transition-1.1.11.tgz#576d8af092434b34201eba5eaecc79dd33c8ad8c"
+  integrity sha1-V22K8JJDSzQgHrpersx53TPIrYw=
+  dependencies:
+    "@babel/runtime" "^7.5.5"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -7914,6 +7968,11 @@ regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha1-vgWtf5v30i4Fb5cmzuUBf78Z4uk=
+
+regenerator-runtime@^0.13.2:
+  version "0.13.3"
+  resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
+  integrity sha1-fPanfY9cb2Drc8X8GVWyzrAea/U=
 
 regenerator-transform@^0.10.0:
   version "0.10.1"

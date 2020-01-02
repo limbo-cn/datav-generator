@@ -1,21 +1,25 @@
 export default {
     getMockBasicBar() {
         return {
-            tooltip: {},
-            legend: {
-                data: ['mock']
-            },
-            xAxis: {
-                data: ['1', '2', '3', '4', '5', '6']
-            },
-            yAxis: {
-
-            },
-            series: [{
-                name: 'mock',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
-            }]
+            color: ['#3398DB'],
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: [10, 52, 200, 334, 390, 330, 220]
+                }
+            ]
         }
     }
 }

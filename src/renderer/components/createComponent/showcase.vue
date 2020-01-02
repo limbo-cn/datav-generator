@@ -77,8 +77,8 @@ export default {
     },
     init() {
       for (let id in this.project.options) {
-        let chart = echarts.init(this.$refs[`item_${id}`][0].$el, 'dark')
-        chart.setOption(this.project.options[id])
+        let chart = echarts.init(this.$refs[`item_${id}`][0].$el, this.project.theme)
+        chart.setOption(this.project.options[id].option)
         this.charts[id] = chart
       }
     }

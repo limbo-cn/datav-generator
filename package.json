@@ -53,6 +53,7 @@
     }
   },
   "dependencies": {
+    "@jiaminghi/data-view": "^2.6.0",
     "axios": "^0.18.0",
     "html2canvas": "^1.0.0-rc.5",
     "vue": "^2.5.16",

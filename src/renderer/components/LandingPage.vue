@@ -32,9 +32,6 @@
 <script>
 import layout from './createComponent/layout'
 
-const { remote } = require('electron')
-const { Menu } = remote
-
 export default {
   name: 'landing-page',
   components: {
@@ -64,22 +61,28 @@ export default {
       this.showLayout = val
     },
     contextmenuProject(id) {
-      this.ProjectContextTemplate.forEach(menu => { menu.id = id })
-      const menu = Menu.buildFromTemplate(this.ProjectContextTemplate)
-      menu.popup({ window: remote.getCurrentWindow() })
+      if (!process.env.IS_WEB) {
+        const { remote } = require('electron')
+        const { Menu } = remote
+        this.ProjectContextTemplate.forEach(menu => { menu.id = id })
+        const menu = Menu.buildFromTemplate(this.ProjectContextTemplate)
+        menu.popup({ window: remote.getCurrentWindow() })
+      }
     },
     useProject(id) {
       let project = this.projects.find(o => o.id === id)
       this.$store.dispatch('common/setProject', project)
-      const { BrowserWindow } = require('electron').remote
-      let win = new BrowserWindow({ frame: false, fullscreen: true })
-      win.on('closed', () => {
-        win = null
-      })
-      const winURL = process.env.NODE_ENV === 'development'
-        ? `http://localhost:9080#showcase`
-        : `file://${__dirname}/index.html#showcase`
-      win.loadURL(winURL)
+      if (!process.env.IS_WEB) {
+        const { BrowserWindow } = require('electron').remote
+        let win = new BrowserWindow({ frame: false, fullscreen: true })
+        win.on('closed', () => {
+          win = null
+        })
+        const winURL = process.env.NODE_ENV === 'development'
+          ? `http://localhost:9080#showcase`
+          : `file://${__dirname}/index.html#showcase`
+        win.loadURL(winURL)
+      }
     },
     editProject(id) {
       let project = this.projects.find(o => o.id === id)
