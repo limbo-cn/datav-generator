@@ -6,11 +6,12 @@ import router from './router'
 import store from './store'
 import {
   Button, Select, Dialog, Container, Header, Main, Aside, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip,
-  Input, Form, FormItem, Image, Loading, Notification, Option
+  Input, Form, FormItem, Image, Loading, Notification, Option, Slider, Footer, Tabs, TabPane, InputNumber,
+  ColorPicker, Radio, RadioGroup, Upload, Checkbox
 } from 'element-ui'
-import { borderBox1 } from '@jiaminghi/data-view'
 
 import './assets/iconfont'
+import { borderBox1 } from 'jiaminghi/data-view'
 
 require('./echarts/china')
 //theme
@@ -45,6 +46,16 @@ Vue.use(FormItem)
 Vue.use(Image)
 Vue.use(Loading)
 Vue.use(Option)
+Vue.use(Slider)
+Vue.use(Footer)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(InputNumber)
+Vue.use(ColorPicker)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(Upload)
+Vue.use(Checkbox)
 Vue.use(Loading.directive)
 
 //dataV

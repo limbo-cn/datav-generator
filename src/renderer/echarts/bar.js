@@ -1,7 +1,6 @@
 export default {
     getMockBasicBar() {
         return {
-            color: ['#3398DB'],
             xAxis: [
                 {
                     type: 'category',

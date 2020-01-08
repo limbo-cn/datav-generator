@@ -3,75 +3,48 @@
     <el-container>
       <el-aside class="aside" :style="{ height: windowHeight + 'px' }">
         <el-menu class="menu">
-          <el-submenu index="line">
+          <el-submenu :index="item.type" v-for="item in chartList" :key="item.type">
             <template slot="title">
               <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-jibenzhexiantu" />
+                <use :xlink:href="item.icon" />
               </svg>
-              <span slot="title">折线图</span>
+              <span slot="title">{{item.title}}</span>
             </template>
-            <el-menu-item @click="basicLine">
+            <el-menu-item
+              v-for="(o,index) in item.categorys"
+              :key="index"
+              @dragstart.native="dragChart(o.option)"
+              draggable
+            >
               <div class="category">
-                <div class="category_name">基本折线图</div>
-                <el-image src="/static/images/line-simple.jpg"></el-image>
+                <div class="category_name">{{o.title}}</div>
+                <el-image :src="o.image"></el-image>
               </div>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="bar">
-            <template slot="title">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-jibenzhuzhuangtu" />
-              </svg>
-              <span slot="title">柱状图</span>
-            </template>
-            <el-menu-item @click="basicBar">
-              <div class="category">
-                <div class="category_name">基本柱状图</div>
-                <el-image src="/static/images/bar-simple.jpg"></el-image>
-              </div>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="pie">
+          <el-submenu index="other">
             <template slot="title">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-bingtu" />
               </svg>
-              <span slot="title">饼图</span>
+              <span slot="title">其他组件</span>
             </template>
-            <el-menu-item @click="basicPie">
-              <div class="category">
-                <div class="category_name">基本饼图</div>
-                <el-image src="/static/images/pie-simple.png"></el-image>
-              </div>
+
+            <el-menu-item
+              v-for="item in compList"
+              :key="item.type"
+              @dragstart.native="dragComponent(item.type,item.defaultLayout)"
+              draggable
+            >
+              <template slot="title">
+                <svg class="icon" aria-hidden="true">
+                  <use :xlink:href="item.icon" />
+                </svg>
+                <span slot="title">{{item.title}}</span>
+              </template>
             </el-menu-item>
-          </el-submenu>
-          <el-submenu index="scatter">
-            <template slot="title">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-bingtu" />
-              </svg>
-              <span slot="title">散点图</span>
-            </template>
-            <el-menu-item>
-              <div class="category">
-                <div class="category_name">基本散点图</div>
-                <el-image src="/static/images/scatter-simple.png"></el-image>
-              </div>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="10">
-            <template slot="title">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-bingtu" />
-              </svg>
-              <span slot="title">gallery</span>
-            </template>
-            <el-menu-item index="10-2" @click="messageMap">message map</el-menu-item>
           </el-submenu>
         </el-menu>
-        <el-tooltip effect="dark" content="拖拽组件布局" placement="top">
-          <div id="preview" @click="addChart" draggable></div>
-        </el-tooltip>
       </el-aside>
       <el-container>
         <el-header class="header">
@@ -89,15 +62,20 @@
                 <el-option label="wonderland" value="wonderland"></el-option>
               </el-select>
             </el-form-item>
-
             <el-button class="nav_button" type="primary" size="medium" @click="returnToIndex">返回主页</el-button>
             <el-button class="nav_button" type="primary" size="medium" @click="generate">直接使用</el-button>
             <el-button class="nav_button" type="primary" size="medium" @click="showSave">保存</el-button>
           </el-form>
         </el-header>
         <el-main class="main">
-          <div id="layout_wrapper" :style="{ height: canvasHeight + 'px' }">
-            <div class="layout" id="main_layout">
+          <div
+            id="layout_wrapper"
+            @dragover="dragover"
+            @drop="dropArea"
+            @click="cancelSelected"
+            :style="{ height: canvasHeight + 'px' }"
+          >
+            <div class="layout" id="main_layout" @click="cancelSelected">
               <grid-layout
                 :layout="project.layout"
                 :col-num="24"
@@ -116,27 +94,38 @@
                   :h="item.h"
                   :i="item.i"
                   :key="item.i"
+                  :class="{ selected: selectedId === item.i}"
+                  @click.native.stop="editBox($event,item.i)"
                   @resize="resizedChart(item.i)"
                   @resized="resizedChart(item.i)"
                   @dragover.native="dragover"
-                  @drop.native="dropChart(item.i)"
+                  @drop.native.stop="dropBox(item.i)"
+                  @contextmenu.native.prevent="$refs.boxMenu.open($event,item.i)"
                 >
-                  <div class="box" :ref="`box${item.i}`">{{idx+1}}</div>
-                  <dv-border-box-1 class="box"></dv-border-box-1>
+                  <CusComp :editor="true" :options="project.options[item.i]"></CusComp>
+                  <div
+                    class="box"
+                    v-if=" !project.options[item.i] || project.options[item.i] .type==='chart'"
+                    :ref="`box${item.i}`"
+                  >{{idx+1}}</div>
+                  <!-- <dv-border-box-1 class="box"></dv-border-box-1> -->
                 </grid-item>
               </grid-layout>
             </div>
           </div>
         </el-main>
+        <el-footer class="footer" height="auto">
+          <compEditor @changeOptions="changeOptions" :options="project.options[selectedId]"></compEditor>
+        </el-footer>
       </el-container>
     </el-container>
-    <el-dialog
-      title="保存"
-      :visible.sync="dialogSaveVisible"
-      :close-on-click-modal="false"
-      width="60%"
-    >
-      <el-image style="margin:0 0 10px 0" v-loading="loadingImage" :src="project.image"></el-image>
+    <el-dialog title="保存" :visible="dialogSaveVisible" :close-on-click-modal="false" width="60%">
+      <el-image
+        style="width:430px;height:270px;left: 50%;margin-left: -215px;"
+        fit="scale-down"
+        v-loading="loadingImage"
+        :src="project.image"
+      ></el-image>
       <el-form label-width="80px">
         <el-form-item label="项目名称">
           <el-input v-model="project.name"></el-input>
@@ -147,30 +136,43 @@
         <el-button type="primary" @click="save">确 定</el-button>
       </span>
     </el-dialog>
+    <context-menu ref="boxMenu" @ctx-open="contextmenuBox">
+      <li class="ctx-item" @click="editBox">编辑</li>
+      <li class="ctx-item" @click="deleteBox">删除</li>
+    </context-menu>
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import VueGridLayout from 'vue-grid-layout'
-import { GenNonDuplicateID } from '../../helper'
-import html2canvas from 'html2canvas'
+import domtoimage from 'dom-to-image'
+import contextMenu from 'vue-context-menu'
+import cloneDeep from 'lodash/cloneDeep'
 
-import Bar from '../../echarts/bar'
-import Line from '../../echarts/line'
-import Pie from '../../echarts/pie'
-import Gallery from '../../echarts/gallery'
+import { GenNonDuplicateID } from '../../helper'
+import chartList from '../../echarts/index'
+import compList from '../otherComponents/index.js'
+import CusComp from '../otherComponents/index.vue'
+import compEditor from '../editComponent/indexEdit'
 
 export default {
   name: 'edit-layout',
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    CusComp,
+    contextMenu,
+    compEditor
   },
   data() {
     return {
+      chartList: chartList.getListData(),
+      compList: compList.getListData(),
       dialogSaveVisible: false,
       loadingImage: false,
+      boxId: 0,
+      selectedId: 0,
       project: {
         id: 0,
         theme: 'default',
@@ -180,14 +182,13 @@ export default {
         image: ''
       },
       windowHeight: 0,
-      previewChart: null,
-      option: null,
+      options: { type: 0 },
       charts: {}
     }
   },
   computed: {
     canvasHeight: function () {
-      return this.windowHeight + 188
+      return this.windowHeight - 300
     },
     projectToEdit: function () {
       return JSON.parse(JSON.stringify(this.$store.getters['common/project']))
@@ -199,80 +200,81 @@ export default {
       //还原组件
       this.$nextTick(() => {
         for (let id in this.project.options) {
-          this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-          this.charts[id].setOption(this.project.options[id].option)
+          if (this.project.options[id].type === 'chart') {
+            this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
+            this.charts[id].setOption(this.project.options[id].chart)
+          }
         }
       })
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.windowHeight = window.innerHeight - 250
+      this.windowHeight = window.innerHeight
     })
     window.onresize = () => {
-      this.windowHeight = window.innerHeight - 250
+      this.windowHeight = window.innerHeight
     }
-    this.previewChart = echarts.init(document.getElementById('preview'), this.project.theme)
   },
   methods: {
-    returnToIndex() {
-      this.$router.push({ path: '/' })
-    },
-    basicLine() {
-      this.previewChart.clear()
-      this.option = Line.getMockBasicLine()
-      this.previewChart.setOption(this.option)
-    },
-    cArea() {
-      this.previewChart.clear()
-      this.option = Line.getMockCArea()
-      this.previewChart.setOption(this.option)
-    },
-    basicBar() {
-      this.previewChart.clear()
-      this.option = Bar.getMockBasicBar()
-      this.previewChart.setOption(this.option)
-    },
-    basicPie() {
-      this.previewChart.clear()
-      this.option = Pie.getMockBasicPie()
-      this.previewChart.setOption(this.option)
-    },
-    vPie() {
-      this.previewChart.clear()
-      this.option = Pie.getMockVPie()
-      this.previewChart.setOption(this.option)
-    },
-    messageMap() {
-      this.previewChart.clear()
-      this.option = Gallery.getMessageMap()
-      this.previewChart.setOption(this.option)
-    },
     dragover(e) {
       e.preventDefault()
     },
-    dropChart(id) {
-      if (!this.option) {
+    returnToIndex() {
+      this.$router.push({ path: '/' })
+    },
+    contextmenuBox(id) {
+      this.boxId = id
+    },
+    dragChart(option) {
+      this.options.type = 'chart'
+      this.options.chart = option.apply(this)
+    },
+    dragComponent(type, layout) {
+      this.options.type = type
+      this.options[`${type}`] = { layout: layout }
+    },
+    dropBox(id) {
+      if (!this.options.type) {
         return
       }
-      this.project.options[id] = { option: this.option }
-      if (this.charts[id]) {
+      if (this.options.type === 'chart') {
+        this.renderChart(id)
+      }
+      this.$set(this.project.options, id, cloneDeep(this.options))
+    },
+    renderChart(id) {
+      if (this.charts[id]) { //chart
         this.charts[id].clear()
       }
       this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-      this.charts[id].setOption(this.option)
+      this.charts[id].setOption(this.options.chart)
     },
-    addChart() {
-      if (!this.option) {
+    dropArea() {
+      if (!this.options.type) {
         return
       }
+      if (this.options.type === 'chart') {
+        this.addChart()
+      } else {
+        this.addComponent()
+      }
+    },
+    addChart() {
       const id = GenNonDuplicateID()
-      this.project.layout.push({ 'x': 0, 'y': 0, 'w': 8, 'h': 9, 'i': id })
+      this.project.layout.push({ 'x': 16, 'y': 18, 'w': 8, 'h': 9, 'i': id })
       this.$nextTick(() => {
-        this.project.options[id] = { option: this.option }
+        this.$set(this.project.options, id, cloneDeep(this.options))
         this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-        this.charts[id].setOption(this.option)
+        this.charts[id].setOption(this.options.chart)
       })
+    },
+    addComponent() {
+      const id = GenNonDuplicateID()
+      let layout = cloneDeep(this.options[`${this.options.type}`].layout)
+      layout.i = id
+      this.project.layout.push(layout)
+      this.$set(this.project.options, id, cloneDeep(this.options))
     },
     resizedChart(id) {
       if (!this.charts[id]) {
@@ -282,23 +284,48 @@ export default {
         this.charts[id].resize()
       })
     },
-    editComponent(id) {
-      alert(id)
+    editBox(e, selected) {
+      if (selected) {
+        this.selectedId = selected
+      } else {
+        this.selectedId = this.boxId
+      }
+    },
+    deleteBox() {
+      const id = this.boxId
+      let index = this.project.layout.findIndex(o => o.i === id)
+      if (index >= 0) {
+        if (this.charts[id]) { //chart
+          this.charts[id].dispose()
+          delete this.charts[id]
+        }
+        if (this.project.options[id]) {
+          delete this.project.options[id]
+        }
+        this.project.layout.splice(index, 1)
+      }
+    },
+    cancelSelected() {
+      this.selectedId = 0
+    },
+    changeOptions(val) {
+      this.project.options[this.selectedId] = val
     },
     changeTheme(val) {
       for (let id in this.charts) {
         const dom = this.charts[id].getDom()
         this.charts[id].dispose()
         this.charts[id] = echarts.init(dom, val)
-        this.charts[id].setOption(this.project.options[id].option)
+        this.charts[id].setOption(this.project.options[id].chart)
       }
     },
     showSave() {
+      this.selectedId = 0
       this.dialogSaveVisible = true
       this.loadingImage = true
-      html2canvas(document.querySelector('#main_layout')).then(canvas => {
+      domtoimage.toPng(document.getElementById('main_layout'), { style: { margin: 'auto' } }).then(dataUrl => {
         this.loadingImage = false
-        this.project.image = canvas.toDataURL('image/jpg')
+        this.project.image = dataUrl
       })
     },
     save() {
@@ -345,6 +372,7 @@ export default {
     height: 100%;
     .el-menu-item {
       display: table;
+      width: 100%;
       .category {
         display: flex;
         flex-flow: column;
@@ -363,20 +391,6 @@ export default {
   }
   .icon {
     margin: 0 5px;
-  }
-
-  #preview {
-    width: 300px;
-    height: 250px;
-    position: absolute;
-    bottom: 0;
-    border-top: 1px solid #e6e6e6;
-    box-sizing: border-box;
-    border-right: 1px solid #e6e6e6;
-    padding: 5px;
-    &:hover {
-      box-shadow: 0px 0px 15px rgba(199, 199, 199, 0.8);
-    }
   }
 }
 
@@ -400,27 +414,37 @@ export default {
       );
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
-    #main_layout {
+    .layout {
       margin: auto;
       overflow: visible;
       width: 960px;
       height: 540px;
-      background: rgba(174, 213, 247, 1);
+      background: #414548;
       box-shadow: rgba(0, 0, 0, 0.5) 0 0 30px 0;
       .vue-grid-item {
         background: rgba(13, 42, 67, 0.2);
         text-align: center;
-        font-size: 2em;
         &:hover {
-          background: rgba(13, 42, 67, 0.4);
+          background: rgba(55, 110, 210, 0.4);
         }
         .box {
+          font-size: 2em;
+          color: white;
           width: 100%;
           height: 100%;
           position: absolute;
         }
       }
+      .selected {
+        background: rgba(13, 42, 67, 0.5);
+        border: 2px dashed white;
+        box-sizing: border-box;
+      }
     }
   }
+}
+
+.footer {
+  padding: 0;
 }
 </style>

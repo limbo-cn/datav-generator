@@ -10,16 +10,22 @@ export default {
 }
 </script>
 
-<style>
-/* CSS */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "webfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style lang="scss">
+html {
+  height: 100%;
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "webfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    #app {
+      height: 100%;
+    }
+  }
 }
 .icon {
   width: 1em;

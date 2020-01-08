@@ -1,21 +1,8 @@
 export default {
     getMockBasicPie() {
         return {
-            title: {
-                text: 'mock Pie',
-                left: 'center',
-                top: 20,
-                textStyle: {
-                    fontSize: 32
-                }
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
-            },
             series: [
                 {
-                    name: 'mock',
                     type: 'pie',
                     radius: '55%',
                     center: ['50%', '50%'],
@@ -25,14 +12,7 @@ export default {
                         { value: 234, name: '3' },
                         { value: 135, name: '4' },
                         { value: 1548, name: '5' }
-                    ],
-                    label: {
-                        normal: {
-                            textStyle: {
-                                fontSize: 32
-                            }
-                        }
-                    }
+                    ]
                 }
             ]
         }

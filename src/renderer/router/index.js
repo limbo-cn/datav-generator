@@ -13,17 +13,17 @@ export default new Router({
     {
       path: '/project',
       name: 'edit-layout',
-      component: require('@/components/createComponent/project').default
+      component: require('@/components/main/project').default
     },
     {
       path: '/showcase',
       name: 'showcase',
-      component: require('@/components/createComponent/showcase').default
+      component: require('@/components/main/showcase').default
     },
     {
       path: '/test',
       name: 'test',
-      component: require('@/components/createComponent/test').default
+      component: require('@/components/main/test').default
     },
     {
       path: '*',

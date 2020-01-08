@@ -1,6 +1,46 @@
 <template>
-  <el-dialog class="dialog" fullscreen title="布局" :visible="dialogVisible" @close="closeDialog">
-    <template v-if="addNew">
+  <div>
+    <el-dialog class="dialog" fullscreen title="选择布局" :visible="dialogVisible" @close="closeDialog">
+      <div class="flex_wrapper">
+        <div class="flex_item" @click="addNewFunc">
+          <div class="el-upload">
+            新建布局
+            <i class="el-icon-plus avatar-uploader-icon"></i>
+          </div>
+        </div>
+        <div class="flex_item" @click="editProj([])">空白页</div>
+        <div
+          @contextmenu.prevent="$refs.layoutMenu.open($event,layout.id)"
+          class="flex_item"
+          v-for="layout in cusLayouts"
+          :key="layout.id"
+          @click="editProj(layout.data)"
+        >
+          <grid-layout
+            :layout="layout.data"
+            :col-num="24"
+            :row-height="6"
+            :is-draggable="false"
+            :is-resizable="false"
+            :verticalCompact="false"
+            :use-css-transforms="true"
+            :margin="[2, 2]"
+          >
+            <grid-item
+              v-for="(item,idx) in layout.data"
+              :x="item.x"
+              :y="item.y"
+              :w="item.w"
+              :h="item.h"
+              :i="item.i"
+              :key="item.i"
+            >{{idx+1}}</grid-item>
+          </grid-layout>
+          <div style="font-size:18px">{{layout.name}}</div>
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog class="dialog" fullscreen title="编辑布局" :visible="addNew" @close="closeDialogEdit">
       <div class="layout_edit">
         <div class="grid_wrapper">
           <grid-layout
@@ -15,7 +55,7 @@
           >
             <grid-item
               v-for="(item,idx) in newLayout.data"
-              @contextmenu.native.prevent="contextmenuBox(item.i)"
+              @contextmenu.native.prevent="$refs.boxMenu.open($event,item.i)"
               :x="item.x"
               :y="item.y"
               :w="item.w"
@@ -33,69 +73,36 @@
         <el-button type="primary" @click="saveAndRetrun">保存并返回</el-button>
         <el-button type="primary" @click="saveAndUse">保存并直接使用</el-button>
       </div>
-    </template>
-    <div class="flex_wrapper" v-if="!addNew">
-      <div class="flex_item" @click="addNewFunc">
-        <div class="el-upload">
-          新建布局
-          <i class="el-icon-plus avatar-uploader-icon"></i>
-        </div>
-      </div>
-      <div class="flex_item" @click="editProj([])">空白页</div>
-      <div
-        @contextmenu.prevent="contextmenuLayouts(layout.id)"
-        class="flex_item"
-        v-for="layout in cusLayouts"
-        :key="layout.id"
-        @click="editProj(layout.data)"
-      >
-        <grid-layout
-          :layout="layout.data"
-          :col-num="24"
-          :row-height="6"
-          :is-draggable="false"
-          :is-resizable="false"
-          :verticalCompact="false"
-          :use-css-transforms="true"
-          :margin="[2, 2]"
-        >
-          <grid-item
-            v-for="(item,idx) in layout.data"
-            :x="item.x"
-            :y="item.y"
-            :w="item.w"
-            :h="item.h"
-            :i="item.i"
-            :key="item.i"
-          >{{idx+1}}</grid-item>
-        </grid-layout>
-        <div style="font-size:18px">{{layout.name}}</div>
-      </div>
-    </div>
-  </el-dialog>
+    </el-dialog>
+    <context-menu ref="layoutMenu" @ctx-open="contextmenuLayouts">
+      <li class="ctx-item" @click="editLayout">编辑</li>
+      <li class="ctx-item" @click="deleteLayout">删除</li>
+    </context-menu>
+    <context-menu ref="boxMenu" @ctx-open="contextmenuBox">
+      <li class="ctx-item" @click="deleteBox">删除</li>
+      <li class="ctx-item disabled">固定</li>
+    </context-menu>
+  </div>
 </template>
 
 <script>
 import VueGridLayout from 'vue-grid-layout'
+import contextMenu from 'vue-context-menu'
+
 import { GenNonDuplicateID } from '../../helper'
 
 export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    contextMenu
   },
   props: ['dialogVisible'],
   data() {
     return {
       addNew: false,
-      LayoutContextTemplate: [
-        { id: 0, label: '编辑', click: item => { this.editLayout(item.id) } },
-        { id: 0, label: '删除', click: item => { this.deleteLayout(item.id) } }
-      ],
-      BoxContextTemplate: [
-        { id: 0, label: '删除', click: item => { this.deleteBox(item.id) } }
-        // { id: 0, label: '固定', click: item => { this.fixBox(item.id) } }
-      ],
+      layoutId: 0,
+      boxId: 0,
       newLayout: {
         id: 0,
         name: '',
@@ -119,34 +126,25 @@ export default {
       this.addNew = true
     },
     contextmenuLayouts(id) {
-      if (!process.env.IS_WEB) {
-        const { remote } = require('electron')
-        const { Menu } = remote
-        this.LayoutContextTemplate.forEach(menu => { menu.id = id })
-        const menu = Menu.buildFromTemplate(this.LayoutContextTemplate)
-        menu.popup({ window: remote.getCurrentWindow() })
-      }
+      this.layoutId = id
     },
-    editLayout(id) {
+    contextmenuBox(id) {
+      this.boxId = id
+    },
+    editLayout() {
+      const id = this.layoutId
       this.newLayout = JSON.parse(JSON.stringify(this.cusLayouts.find(o => o.id === id))) //实现深拷贝，后续如果有其他属性，可能需要修改实现方式
       this.addNew = true
     },
-    deleteLayout(id) {
+    deleteLayout() {
+      const id = this.layoutId
       this.$store.dispatch('local/removeLayout', id)
     },
     addBox() {
       this.newLayout.data.push({ 'x': 0, 'y': 0, 'w': 12, 'h': 9, 'i': GenNonDuplicateID() })
     },
-    contextmenuBox(id) {
-      if (!process.env.IS_WEB) {
-        const { remote } = require('electron')
-        const { Menu } = remote
-        this.BoxContextTemplate.forEach(menu => { menu.id = id })
-        const menu = Menu.buildFromTemplate(this.BoxContextTemplate)
-        menu.popup({ window: remote.getCurrentWindow() })
-      }
-    },
-    deleteBox(id) {
+    deleteBox() {
+      const id = this.boxId
       let index = this.newLayout.data.findIndex(o => o.i === id)
       if (index >= 0) {
         this.newLayout.data.splice(index, 1)
@@ -185,6 +183,9 @@ export default {
     closeDialog() {
       this.$emit('update:dialogVisible', false)
     },
+    closeDialogEdit() {
+      this.returnToLayouts()
+    },
     editProj(layout) {
       this.$store.dispatch('common/setProject', {
         id: GenNonDuplicateID(),
@@ -203,7 +204,6 @@ export default {
 .flex_wrapper {
   display: flex;
   flex-wrap: wrap;
-  overflow: auto;
 }
 
 .layout_edit {

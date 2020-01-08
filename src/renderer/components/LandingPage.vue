@@ -15,7 +15,7 @@
           <div
             class="flex_item"
             @click="editProject(project.id)"
-            @contextmenu.prevent="contextmenuProject(project.id)"
+            @contextmenu.prevent="$refs.projectMenu.open($event,project.id)"
             v-for="project in projects"
             :key="project.id"
           >
@@ -26,25 +26,29 @@
       </el-main>
     </el-container>
     <layout ref="addNew" :dialogVisible.sync="showLayout"></layout>
+    <context-menu ref="projectMenu" @ctx-open="contextmenuProject">
+      <li class="ctx-item" @click="useProject">使用</li>
+      <li class="ctx-item" @click="editProject">编辑</li>
+      <li class="ctx-item" @click="deleteProject">删除</li>
+    </context-menu>
   </div>
 </template>
 
 <script>
-import layout from './createComponent/layout'
+import contextMenu from 'vue-context-menu'
+
+import layout from './main/layout'
 
 export default {
   name: 'landing-page',
   components: {
-    'layout': layout
+    layout,
+    contextMenu
   },
   data() {
     return {
       showLayout: false,
-      ProjectContextTemplate: [
-        { id: 0, label: '直接使用', click: item => { this.useProject(item.id) } },
-        { id: 0, label: '编辑', click: item => { this.editProject(item.id) } },
-        { id: 0, label: '删除', click: item => { this.deleteProject(item.id) } }
-      ]
+      projectId: 0
     }
   },
   computed: {
@@ -61,15 +65,10 @@ export default {
       this.showLayout = val
     },
     contextmenuProject(id) {
-      if (!process.env.IS_WEB) {
-        const { remote } = require('electron')
-        const { Menu } = remote
-        this.ProjectContextTemplate.forEach(menu => { menu.id = id })
-        const menu = Menu.buildFromTemplate(this.ProjectContextTemplate)
-        menu.popup({ window: remote.getCurrentWindow() })
-      }
+      this.projectId = id
     },
-    useProject(id) {
+    useProject() {
+      const id = this.projectId
       let project = this.projects.find(o => o.id === id)
       this.$store.dispatch('common/setProject', project)
       if (!process.env.IS_WEB) {
@@ -84,7 +83,7 @@ export default {
         win.loadURL(winURL)
       }
     },
-    editProject(id) {
+    editProject(id = this.projectId) {
       let project = this.projects.find(o => o.id === id)
       if (!project) {
         return
@@ -92,7 +91,8 @@ export default {
       this.$store.dispatch('common/setProject', project)
       this.$router.push({ path: 'project' })
     },
-    deleteProject(id) {
+    deleteProject() {
+      const id = this.projectId
       this.$store.dispatch('local/removeProject', id)
     }
   }

@@ -18,7 +18,9 @@
       :h="item.h"
       :i="item.i"
       :key="item.i"
-    ></grid-item>
+    >
+      <CusComp :options="project.options[item.i]"></CusComp>
+    </grid-item>
   </grid-layout>
 </template>
 
@@ -26,11 +28,14 @@
 import echarts from 'echarts'
 import VueGridLayout from 'vue-grid-layout'
 
+import CusComp from '../otherComponents/index.vue'
+
 export default {
   name: 'showcase',
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    CusComp
   },
   data() {
     return {
@@ -77,10 +82,13 @@ export default {
     },
     init() {
       for (let id in this.project.options) {
-        let chart = echarts.init(this.$refs[`item_${id}`][0].$el, this.project.theme)
-        chart.setOption(this.project.options[id].option)
-        this.charts[id] = chart
+        if (this.project.options[id].type === 'chart') {
+          let chart = echarts.init(this.$refs[`item_${id}`][0].$el, this.project.theme)
+          chart.setOption(this.project.options[id].chart)
+          this.charts[id] = chart
+        }
       }
+      document.querySelector('.vue-grid-layout').style.height = '100%'
     }
   }
 }
@@ -88,6 +96,8 @@ export default {
 
 <style scoped>
 .vue-grid-layout {
+  height: 100%;
   overflow: hidden;
+  background: #414548;
 }
 </style>
