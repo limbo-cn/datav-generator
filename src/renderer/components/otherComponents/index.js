@@ -47,7 +47,8 @@ export default {
             marginLeft: 0,
             marginTop: 0,
             fontSize: 50,
-            text: 'default'
+            text: 'default',
+            animate: false
         }
         let themedOption = {
             default: {
@@ -96,6 +97,21 @@ export default {
             marks: JSON.stringify({ 20: 'no much', 50: 'narmal', 100: 'full' }),
             marginLeft: 0,
             marginTop: 0
+        }
+        let themedOption = {
+            default: {
+
+            }
+        }
+        return merge(basic, themedOption[theme])
+    },
+    getDefaultOptionButton(theme = 'default') {
+        let basic = {
+            textAlign: 'center',
+            marginLeft: 0,
+            marginTop: 0,
+            text: 'default',
+            size: 'medium'
         }
         let themedOption = {
             default: {

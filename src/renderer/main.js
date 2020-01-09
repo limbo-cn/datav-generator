@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueBus from 'vue-bus'
 import axios from 'axios'
 
 import App from './App'
@@ -11,7 +12,7 @@ import {
 } from 'element-ui'
 
 import './assets/iconfont'
-import { borderBox1 } from 'jiaminghi/data-view'
+// import { borderBox1 } from 'data-view'
 
 require('./echarts/china')
 //theme
@@ -26,6 +27,7 @@ require('./echarts/theme/wonderland')
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+Vue.use(VueBus)
 
 //element
 Vue.use(Button)
@@ -59,7 +61,7 @@ Vue.use(Checkbox)
 Vue.use(Loading.directive)
 
 //dataV
-Vue.use(borderBox1)
+// Vue.use(borderBox1)
 
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$notify = Notification

@@ -58,6 +58,7 @@
     "dom-to-image": "^2.6.0",
     "lodash": "^4.17.15",
     "vue": "^2.5.16",
+    "vue-bus": "^1.2.1",
     "vue-context-menu": "^2.0.6",
     "vue-electron": "^1.0.6",
     "vue-grid-layout": "2.1.13",

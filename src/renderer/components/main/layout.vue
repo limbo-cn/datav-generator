@@ -178,6 +178,7 @@ export default {
         options: {},
         image: ''
       })
+      this.closeDialog()
       this.$router.push({ path: 'project' })
     },
     closeDialog() {
@@ -194,6 +195,7 @@ export default {
         options: {},
         image: ''
       })
+      this.closeDialog()
       this.$router.push({ path: 'project' })
     }
   }

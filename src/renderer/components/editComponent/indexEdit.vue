@@ -20,6 +20,11 @@
       :option="options.slider"
       @changeOption="changeOption"
     />
+    <MyButtonEdit
+      v-if="options && options.type ==='button'"
+      :option="options.button"
+      @changeOption="changeOption"
+    />
   </div>
 </template>
 
@@ -28,6 +33,7 @@ import MyTextEdit from './textEdit'
 import MyImageEdit from './imageEdit'
 import MySVGEdit from './svgEdit'
 import MySliderEdit from './sliderEdit'
+import MyButtonEdit from './buttonEdit'
 
 export default {
   props: ['options'],
@@ -35,7 +41,8 @@ export default {
     MyTextEdit,
     MyImageEdit,
     MySVGEdit,
-    MySliderEdit
+    MySliderEdit,
+    MyButtonEdit
   },
   methods: {
     changeOption(val) {

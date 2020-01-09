@@ -131,7 +131,7 @@
           <el-input v-model="project.name"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button @click="dialogSaveVisible = false">取 消</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
       </span>
@@ -164,6 +164,14 @@ export default {
     CusComp,
     contextMenu,
     compEditor
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.windowHeight = window.innerHeight
+    })
+    window.onresize = () => {
+      this.windowHeight = window.innerHeight
+    }
   },
   data() {
     return {
@@ -206,14 +214,6 @@ export default {
           }
         }
       })
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.windowHeight = window.innerHeight
-    })
-    window.onresize = () => {
-      this.windowHeight = window.innerHeight
     }
   },
   methods: {
@@ -323,7 +323,10 @@ export default {
       this.selectedId = 0
       this.dialogSaveVisible = true
       this.loadingImage = true
-      domtoimage.toPng(document.getElementById('main_layout'), { style: { margin: 'auto' } }).then(dataUrl => {
+      domtoimage.toPng(document.getElementById('main_layout'), {
+        style: { margin: 'auto' },
+        imagePlaceholder: '/static/images/empty_image.png'
+      }).then(dataUrl => {
         this.loadingImage = false
         this.project.image = dataUrl
       })
@@ -339,17 +342,7 @@ export default {
     },
     generate() {
       this.$store.dispatch('common/setProject', this.project)
-      if (!process.env.IS_WEB) {
-        const { BrowserWindow } = require('electron').remote
-        let win = new BrowserWindow({ frame: false, fullscreen: true })
-        win.on('closed', () => {
-          win = null
-        })
-        const winURL = process.env.NODE_ENV === 'development'
-          ? `http://localhost:9080#showcase`
-          : `file://${__dirname}/index.html#showcase`
-        win.loadURL(winURL)
-      }
+      this.$bus.emit('showcase')
     }
   }
 }

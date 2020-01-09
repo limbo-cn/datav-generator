@@ -30,6 +30,9 @@
         </el-form-item>
       </el-form>
     </el-tab-pane>
+    <el-tab-pane label="事件设置">
+      <el-form></el-form>
+    </el-tab-pane>
   </el-tabs>
 </template>
 

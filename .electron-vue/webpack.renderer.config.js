@@ -146,7 +146,7 @@ let rendererConfig = {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
       'vue$': 'vue/dist/vue.esm.js',
-      'jiaminghi': '@jiaminghi'
+      'data-view': '@jiaminghi/data-view'
     },
     extensions: ['.js', '.vue', '.json', '.css', '.node']
   },

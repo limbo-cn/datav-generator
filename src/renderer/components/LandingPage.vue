@@ -7,8 +7,8 @@
       <el-main>
         <div class="flex_wrapper">
           <div class="flex_item" @click="createNew">
-            新建项目
             <div class="el-upload">
+              新建项目
               <i class="el-icon-plus avatar-uploader-icon"></i>
             </div>
           </div>
@@ -45,6 +45,12 @@ export default {
     layout,
     contextMenu
   },
+  created() {
+    this.$bus.on('showcase', this.showcase)
+  },
+  beforeDestroy() {
+    this.$bus.off('showcase', this.showcase)
+  },
   data() {
     return {
       showLayout: false,
@@ -71,9 +77,18 @@ export default {
       const id = this.projectId
       let project = this.projects.find(o => o.id === id)
       this.$store.dispatch('common/setProject', project)
+      this.$bus.emit('showcase')
+    },
+    showcase() {
       if (!process.env.IS_WEB) {
-        const { BrowserWindow } = require('electron').remote
-        let win = new BrowserWindow({ frame: false, fullscreen: true })
+        let win = new this.$electron.remote.BrowserWindow({
+          frame: false,
+          fullscreen: true,
+          webPreferences: {
+            nodeIntegration: true,
+            webSecurity: false
+          }
+        })
         win.on('closed', () => {
           win = null
         })
@@ -81,6 +96,8 @@ export default {
           ? `http://localhost:9080#showcase`
           : `file://${__dirname}/index.html#showcase`
         win.loadURL(winURL)
+      } else {
+        this.$router.push({ path: '/showcase' })
       }
     },
     editProject(id = this.projectId) {
