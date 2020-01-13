@@ -96,6 +96,8 @@ export default {
           ? `http://localhost:9080#showcase`
           : `file://${__dirname}/index.html#showcase`
         win.loadURL(winURL)
+        //devtool
+        win.webContents.openDevTools()
       } else {
         this.$router.push({ path: '/showcase' })
       }

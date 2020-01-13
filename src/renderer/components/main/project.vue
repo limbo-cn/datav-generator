@@ -65,6 +65,7 @@
             <el-button class="nav_button" type="primary" size="medium" @click="returnToIndex">返回主页</el-button>
             <el-button class="nav_button" type="primary" size="medium" @click="generate">直接使用</el-button>
             <el-button class="nav_button" type="primary" size="medium" @click="showSave">保存</el-button>
+            <el-button class="nav_button" type="primary" size="medium" @click="showSave">设置</el-button>
           </el-form>
         </el-header>
         <el-main class="main">
@@ -172,6 +173,19 @@ export default {
     window.onresize = () => {
       this.windowHeight = window.innerHeight
     }
+    document.onkeydown = e => {
+      var keyCode = e.keyCode || e.which || e.charCode
+      var ctrlKey = e.ctrlKey || e.metaKey
+      if (ctrlKey && keyCode === 83) {
+        this.keyPressSave()
+      }
+      if (ctrlKey && keyCode === 67) {
+        this.keyPressCopy()
+      }
+      if (ctrlKey && keyCode === 86) {
+        this.keyPressPaste()
+      }
+    }
   },
   data() {
     return {
@@ -190,8 +204,10 @@ export default {
         image: ''
       },
       windowHeight: 0,
-      options: { type: 0 },
-      charts: {}
+      option: { type: 0 },
+      charts: {},
+      copyOption: null,
+      copyLayout: null
     }
   },
   computed: {
@@ -223,58 +239,68 @@ export default {
     returnToIndex() {
       this.$router.push({ path: '/' })
     },
+    keyPressSave() {
+      this.save()
+    },
+    keyPressCopy() {
+      this.copyOption = this.project.options[this.selectedId]
+      this.copyLayout = this.project.layout.find(o => o.i === this.selectedId)
+    },
+    keyPressPaste() {
+      if (!this.copyOption || !this.copyLayout) { return }
+      let copyLayout = cloneDeep(this.copyLayout)
+      let copyOption = cloneDeep(this.copyOption)
+      const id = GenNonDuplicateID()
+      copyLayout.i = id
+      this.project.layout.push(copyLayout)
+      this.$set(this.project.options, id, copyOption)
+      if (copyOption.type === 'chart') {
+        this.$nextTick(() => {
+          this.renderChart(id, copyLayout)
+        })
+      }
+    },
     contextmenuBox(id) {
       this.boxId = id
     },
     dragChart(option) {
-      this.options.type = 'chart'
-      this.options.chart = option.apply(this)
+      this.option.type = 'chart'
+      this.option.chart = option.apply(this)
     },
     dragComponent(type, layout) {
-      this.options.type = type
-      this.options[`${type}`] = { layout: layout }
+      this.option.type = type
+      this.option[`${type}`] = { layout: layout }
     },
     dropBox(id) {
-      if (!this.options.type) {
+      if (!this.option.type) {
         return
       }
-      if (this.options.type === 'chart') {
-        this.renderChart(id)
+      if (this.option.type === 'chart') {
+        this.renderChart(id, this.option)
       }
-      this.$set(this.project.options, id, cloneDeep(this.options))
+      this.$set(this.project.options, id, cloneDeep(this.option))
     },
-    renderChart(id) {
+    renderChart(id, option) {
       if (this.charts[id]) { //chart
         this.charts[id].clear()
       }
       this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-      this.charts[id].setOption(this.options.chart)
+      this.charts[id].setOption(this.option.chart)
     },
     dropArea() {
-      if (!this.options.type) {
+      if (!this.option.type) {
         return
       }
-      if (this.options.type === 'chart') {
-        this.addChart()
-      } else {
-        this.addComponent()
-      }
-    },
-    addChart() {
       const id = GenNonDuplicateID()
-      this.project.layout.push({ 'x': 16, 'y': 18, 'w': 8, 'h': 9, 'i': id })
-      this.$nextTick(() => {
-        this.$set(this.project.options, id, cloneDeep(this.options))
-        this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-        this.charts[id].setOption(this.options.chart)
-      })
-    },
-    addComponent() {
-      const id = GenNonDuplicateID()
-      let layout = cloneDeep(this.options[`${this.options.type}`].layout)
+      let layout = cloneDeep(this.option[`${this.option.type}`].layout || { 'x': 16, 'y': 18, 'w': 8, 'h': 9, 'i': 0 })
       layout.i = id
       this.project.layout.push(layout)
-      this.$set(this.project.options, id, cloneDeep(this.options))
+      this.$set(this.project.options, id, cloneDeep(this.option))
+      if (this.option.type === 'chart') {
+        this.$nextTick(() => {
+          this.renderChart(id, this.option)
+        })
+      }
     },
     resizedChart(id) {
       if (!this.charts[id]) {
@@ -325,7 +351,7 @@ export default {
       this.loadingImage = true
       domtoimage.toPng(document.getElementById('main_layout'), {
         style: { margin: 'auto' },
-        imagePlaceholder: '/static/images/empty_image.png'
+        imagePlaceholder: './static/images/empty_image.png'
       }).then(dataUrl => {
         this.loadingImage = false
         this.project.image = dataUrl

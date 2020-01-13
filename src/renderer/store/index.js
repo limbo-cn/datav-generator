@@ -11,8 +11,8 @@ if (!process.env.IS_WEB) {
     createSharedMutations()
   ]
 } else {
-  // const createPersistedState = require('vuex-persistedstate')
-  // plugins = [createPersistedState()]
+  const createPersistedState = require('vuex-persistedstate').default
+  plugins = [createPersistedState()]
 }
 
 Vue.use(Vuex)

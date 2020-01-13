@@ -13,7 +13,7 @@ export default {
                 categorys: [
                     {
                         title: '基本折线图',
-                        image: '/static/images/line-simple.jpg',
+                        image: './static/images/line-simple.jpg',
                         option: Line.getMockBasicLine
                     }
                 ]
@@ -25,7 +25,7 @@ export default {
                 categorys: [
                     {
                         title: '基本柱状图',
-                        image: '/static/images/bar-simple.jpg',
+                        image: './static/images/bar-simple.jpg',
                         option: Bar.getMockBasicBar
                     }
                 ]
@@ -37,7 +37,7 @@ export default {
                 categorys: [
                     {
                         title: '基本饼图',
-                        image: '/static/images/pie-simple.png',
+                        image: './static/images/pie-simple.png',
                         option: Pie.getMockBasicPie
                     }
                 ]
@@ -49,7 +49,7 @@ export default {
                 categorys: [
                     {
                         title: '基本散点图',
-                        image: '/static/images/scatter-simple.png',
+                        image: './static/images/scatter-simple.png',
                         option: Pie.getMockBasicPie
                     }
                 ]
@@ -61,7 +61,7 @@ export default {
                 categorys: [
                     {
                         title: '飞线图',
-                        image: '/static/images/line-map.png',
+                        image: './static/images/line-map.png',
                         option: Map.getMessageMap
                     }
                 ]

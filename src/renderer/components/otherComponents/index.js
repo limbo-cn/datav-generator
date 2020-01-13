@@ -60,7 +60,7 @@ export default {
     getDefaultOptionImage(theme = 'default') {
         let basic = {
             type: 'network',
-            url: '/static/images/empty_image.png',
+            url: 'https://avatars3.githubusercontent.com/u/13409222',
             dataUrl: '',
             fit: 'fill'
         }
