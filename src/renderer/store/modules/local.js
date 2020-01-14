@@ -1,6 +1,7 @@
 const state = {
     layouts: [],
-    projects: [] // id,name,image,layout,options
+    projects: [], // id,name,image,layout,options
+    events: []
 }
 
 const mutations = {
@@ -31,6 +32,17 @@ const mutations = {
     },
     CLEAR_PROJECTS: (state) => {
         state.projects = []
+    },
+    ADD_EVENT: (state, event) => {
+        let index = state.events.findIndex(o => o.id === event.id)
+        if (index >= 0) {
+            state.events.splice(index, 1, event) // splice来触发vue computed
+        } else {
+            state.events.push(event)
+        }
+    },
+    REMOVE_EVENT: (state, id) => {
+        state.events.splice(state.events.findIndex(item => item.id === id), 1)
     }
 }
 
@@ -52,12 +64,19 @@ const actions = {
     },
     clearProjects({ commit }) {
         commit('CLEAR_PROJECTS')
+    },
+    addEvent({ commit }, event) {
+        commit('ADD_EVENT', event)
+    },
+    removeEvent({ commit }, id) {
+        commit('REMOVE_EVENT', id)
     }
 }
 
 const getters = {
     layouts: state => state.layouts,
-    projects: state => state.projects
+    projects: state => state.projects,
+    events: state => state.events
 }
 
 export default {

@@ -30,14 +30,13 @@
           </el-form-item>
         </el-form-item>
       </el-form>
-    </el-tab-pane>
-    <el-tab-pane label="事件设置">
       <el-form :inline="true">
-        <el-form-item label="开启事件">
+        <el-form-item label="开启特效">
           <el-checkbox v-model="optionData.animate">文字滚动</el-checkbox>
         </el-form-item>
       </el-form>
     </el-tab-pane>
+    <el-tab-pane label="事件设置"></el-tab-pane>
   </el-tabs>
 </template>
 

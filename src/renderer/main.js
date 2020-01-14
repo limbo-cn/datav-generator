@@ -8,7 +8,7 @@ import store from './store'
 import {
   Button, Select, Dialog, Container, Header, Main, Aside, Menu, MenuItem, MenuItemGroup, Submenu, Tooltip,
   Input, Form, FormItem, Image, Loading, Notification, Option, Slider, Footer, Tabs, TabPane, InputNumber,
-  ColorPicker, Radio, RadioGroup, Upload, Checkbox
+  ColorPicker, Radio, RadioGroup, Upload, Checkbox, Table, TableColumn, Tag
 } from 'element-ui'
 
 import './assets/iconfont'
@@ -58,6 +58,9 @@ Vue.use(Radio)
 Vue.use(RadioGroup)
 Vue.use(Upload)
 Vue.use(Checkbox)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Tag)
 Vue.use(Loading.directive)
 
 //dataV

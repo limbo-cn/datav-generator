@@ -11,6 +11,11 @@
           </el-form-item>
         </el-form-item>
       </el-form>
+      <el-form :inline="true">
+        <el-form-item label="开启特效">
+          <el-checkbox v-model="optionData.rotate">旋转</el-checkbox>
+        </el-form-item>
+      </el-form>
     </el-tab-pane>
     <el-tab-pane label="数据设置">
       <el-form>

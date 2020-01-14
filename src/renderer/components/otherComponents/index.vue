@@ -1,7 +1,11 @@
 <template>
   <div class="cus_component" :class="{ editor: editor }">
     <MySlider v-if="options && options.type === 'slider'" :option="options.slider"></MySlider>
-    <MyButton v-if="options && options.type === 'button'" :option="options.button"></MyButton>
+    <MyButton
+      v-if="options && options.type === 'button'"
+      :option="options.button"
+      :events="options.events"
+    ></MyButton>
     <MyText v-if="options && options.type === 'text'" :option="options.text"></MyText>
     <MyImage v-if="options && options.type === 'image'" :option="options.image"></MyImage>
     <MySVG v-if="options && options.type === 'svg'" :option="options.svg"></MySVG>
