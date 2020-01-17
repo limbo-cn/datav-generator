@@ -1,5 +1,10 @@
 <template>
   <div class="edit_wrapper">
+    <MyChartEdit
+      v-if="options && options.type ==='chart'"
+      :option="options.chart"
+      @changeOption="changeOption"
+    />
     <MyTextEdit
       v-if="options && options.type ==='text'"
       :option="options.text"
@@ -35,6 +40,7 @@
 </template>
 
  <script>
+import MyChartEdit from './echarts/indexEchartsEdit'
 import MyTextEdit from './textEdit'
 import MyImageEdit from './imageEdit'
 import MySVGEdit from './svgEdit'
@@ -44,6 +50,7 @@ import MyButtonEdit from './buttonEdit'
 export default {
   props: ['options'],
   components: {
+    MyChartEdit,
     MyTextEdit,
     MyImageEdit,
     MySVGEdit,

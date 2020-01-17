@@ -76,7 +76,7 @@
             @click="cancelSelected"
             :style="{ height: canvasHeight + 'px' }"
           >
-            <div class="layout" id="main_layout" @click="cancelSelected">
+            <div class="layout" id="main_layout" @click.stop="cancelSelected">
               <grid-layout
                 :layout="project.layout"
                 :col-num="24"
@@ -186,6 +186,9 @@ export default {
         this.keyPressPaste()
       }
     }
+    if (!this.project.id && this.projectToEdit.id) {
+      this.$store.dispatch('common/setProject', cloneDeep(this.projectToEdit))
+    }
   },
   data() {
     return {
@@ -219,9 +222,20 @@ export default {
     }
   },
   watch: {
-    projectToEdit: function (val) {
-      this.project = val
-      //还原组件
+    projectToEdit: function () {
+      this.renderProject()
+    }
+  },
+  methods: {
+    dragover(e) {
+      e.preventDefault()
+    },
+    returnToIndex() {
+      this.charts = {}
+      this.$router.push({ path: '/' })
+    },
+    renderProject() {
+      this.project = this.projectToEdit
       this.$nextTick(() => {
         for (let id in this.project.options) {
           if (this.project.options[id].type === 'chart') {
@@ -230,14 +244,6 @@ export default {
           }
         }
       })
-    }
-  },
-  methods: {
-    dragover(e) {
-      e.preventDefault()
-    },
-    returnToIndex() {
-      this.$router.push({ path: '/' })
     },
     keyPressSave() {
       this.save()
@@ -256,7 +262,7 @@ export default {
       this.$set(this.project.options, id, copyOption)
       if (copyOption.type === 'chart') {
         this.$nextTick(() => {
-          this.renderChart(id, copyLayout)
+          this.renderChart(id, copyOption.chart)
         })
       }
     },
@@ -276,16 +282,16 @@ export default {
         return
       }
       if (this.option.type === 'chart') {
-        this.renderChart(id, this.option)
+        this.renderChart(id, this.option.chart)
       }
       this.$set(this.project.options, id, cloneDeep(this.option))
     },
-    renderChart(id, option) {
+    renderChart(id, chart) {
       if (this.charts[id]) { //chart
         this.charts[id].clear()
       }
       this.charts[id] = echarts.init(this.$refs[`box${id}`][0], this.project.theme)
-      this.charts[id].setOption(this.option.chart)
+      this.charts[id].setOption(chart)
     },
     dropArea() {
       if (!this.option.type) {
@@ -298,7 +304,7 @@ export default {
       this.$set(this.project.options, id, cloneDeep(this.option))
       if (this.option.type === 'chart') {
         this.$nextTick(() => {
-          this.renderChart(id, this.option)
+          this.renderChart(id, this.option.chart)
         })
       }
     },
@@ -311,6 +317,7 @@ export default {
       })
     },
     editBox(e, selected) {
+      this.cancelSelected()
       if (selected) {
         this.selectedId = selected
       } else {
@@ -335,7 +342,10 @@ export default {
       this.selectedId = 0
     },
     changeOptions(val) {
-      this.project.options[this.selectedId] = val
+      this.project.options[this.selectedId] = cloneDeep(val)
+      if (val.type === 'chart') {
+        this.renderChart(this.selectedId, this.project.options[this.selectedId].chart)
+      }
     },
     changeTheme(val) {
       for (let id in this.charts) {
@@ -452,12 +462,13 @@ export default {
           width: 100%;
           height: 100%;
           position: absolute;
+          zoom: 0.5;
+          pointer-events: none;
         }
       }
       .selected {
         background: rgba(13, 42, 67, 0.5);
         border: 2px dashed white;
-        box-sizing: border-box;
       }
     }
   }

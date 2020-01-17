@@ -29,6 +29,12 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
+      <el-form :inline="true">
+        <el-form-item label="开启特效">
+          <el-checkbox v-model="optionData.rotate">旋转</el-checkbox>
+          <el-checkbox v-model="optionData.heartbeat">心跳</el-checkbox>
+        </el-form-item>
+      </el-form>
     </el-tab-pane>
     <el-tab-pane label="事件设置">
       <el-form></el-form>
@@ -58,6 +64,10 @@ export default {
         this.$emit('changeOption', this.optionData)
       },
       deep: true
+    },
+    option: function (val) {
+      let option = merge(Com.getDefaultOptionImage(), val)
+      merge(this.optionData, option)
     }
   },
   methods: {

@@ -71,6 +71,10 @@ export default {
         this.$emit('changeOption', this.optionData)
       },
       deep: true
+    },
+    option: function (val) {
+      let option = merge(Com.getDefaultOptionSlider(), val)
+      merge(this.optionData, option)
     }
   },
   methods: {

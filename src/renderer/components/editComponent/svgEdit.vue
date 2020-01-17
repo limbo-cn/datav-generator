@@ -9,11 +9,21 @@
           <el-form-item label="距离上边：">
             <el-input-number v-model="optionData.marginTop"></el-input-number>
           </el-form-item>
+          <el-form-item label="大小：">
+            <el-input-number
+              v-model="optionData.zoom"
+              :max="5"
+              :min="0.5"
+              :precision="2"
+              :step="0.1"
+            ></el-input-number>
+          </el-form-item>
         </el-form-item>
       </el-form>
       <el-form :inline="true">
         <el-form-item label="开启特效">
           <el-checkbox v-model="optionData.rotate">旋转</el-checkbox>
+          <el-checkbox v-model="optionData.heartbeat">心跳</el-checkbox>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -49,6 +59,10 @@ export default {
         this.$emit('changeOption', this.optionData)
       },
       deep: true
+    },
+    option: function (val) {
+      let option = merge(Com.getDefaultOptionSVG(), val)
+      merge(this.optionData, option)
     }
   },
   methods: {

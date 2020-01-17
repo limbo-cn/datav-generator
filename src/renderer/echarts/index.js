@@ -1,7 +1,7 @@
 import Line from './line'
 import Bar from './bar'
 import Pie from './pie'
-import Map from './map'
+import Scatter from './scatter'
 
 export default {
     getListData() {
@@ -25,7 +25,7 @@ export default {
                 categorys: [
                     {
                         title: '基本柱状图',
-                        image: './static/images/bar-simple.jpg',
+                        image: './static/images/bar-simple.png',
                         option: Bar.getMockBasicBar
                     }
                 ]
@@ -50,19 +50,7 @@ export default {
                     {
                         title: '基本散点图',
                         image: './static/images/scatter-simple.png',
-                        option: Pie.getMockBasicPie
-                    }
-                ]
-            },
-            {
-                type: 'map',
-                icon: '#icon-bingtu',
-                title: '地图',
-                categorys: [
-                    {
-                        title: '飞线图',
-                        image: './static/images/line-map.png',
-                        option: Map.getMessageMap
+                        option: Scatter.getMockBasicScatter
                     }
                 ]
             }

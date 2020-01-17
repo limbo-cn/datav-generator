@@ -1,17 +1,18 @@
+import Common from './common'
+import merge from 'lodash/merge'
 export default {
     getMockBasicBar() {
         return {
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
+            title: Common.getCommonTitle(),
+            legend: Common.getCommonLegend(),
+            grid: Common.getCommonGrid(),
+            xAxis: merge(Common.getCommonxAxis(), {
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            }),
+            yAxis: Common.getCommonyAxis(),
+            tooltip: merge(Common.getCommonyTooltip(), {
+                trigger: 'axis'
+            }),
             series: [
                 {
                     type: 'bar',

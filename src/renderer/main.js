@@ -14,7 +14,6 @@ import {
 import './assets/iconfont'
 // import { borderBox1 } from 'data-view'
 
-require('./echarts/china')
 //theme
 require('./echarts/theme/vintage')
 require('./echarts/theme/chalk')
