@@ -6,17 +6,18 @@ export default {
             title: Common.getCommonTitle(),
             legend: Common.getCommonLegend(),
             grid: Common.getCommonGrid(),
-            xAxis: merge(Common.getCommonxAxis(), {
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            }),
+            xAxis: Common.getCommonxAxis(),
             yAxis: Common.getCommonyAxis(),
             tooltip: merge(Common.getCommonyTooltip(), {
                 trigger: 'axis'
             }),
+            dataset: Common.getCommonDataset(),
             series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
                 type: 'line'
-            }]
+            }, {
+                type: 'line'
+            }],
+            data: Common.getCommonData()
         }
     }
 }

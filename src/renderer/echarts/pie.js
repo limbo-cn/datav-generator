@@ -1,4 +1,5 @@
 import Common from './common'
+// import merge from 'lodash/merge'
 export default {
     getMockBasicPie() {
         return {
@@ -9,8 +10,11 @@ export default {
             series: [
                 {
                     type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '50%'],
+                    roseType: '',
+                    radius: '50%',
+                    label: {
+                        fontSize: 24
+                    },
                     data: [
                         { value: 335, name: '1' },
                         { value: 310, name: '2' },
@@ -19,7 +23,8 @@ export default {
                         { value: 1548, name: '5' }
                     ]
                 }
-            ]
+            ],
+            data: Common.getCommonData()
         }
     }
 }

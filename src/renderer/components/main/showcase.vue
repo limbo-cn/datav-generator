@@ -41,6 +41,7 @@ export default {
     return {
       rowHeight: 0,
       charts: {},
+      interval: {},
       project: {
         id: 0,
         name: '',
@@ -86,9 +87,23 @@ export default {
           let chart = echarts.init(this.$refs[`item_${id}`][0].$el, this.project.theme)
           chart.setOption(this.project.options[id].chart)
           this.charts[id] = chart
+          if (this.project.options[id].chart.data.intervalAPI.use) {
+            this.registerInterval(id, this.project.options[id].chart)
+          }
         }
       }
       document.querySelector('.vue-grid-layout').style.height = '100%'
+    },
+    registerInterval(id, chart) {
+      clearInterval(this.interval[id])
+      const interval = chart.data.intervalAPI.interval * 1000
+      if (chart.data.intervalAPI.use) {
+        this.interval[id] = setInterval(() => {
+          this.$http.get(chart.data.intervalAPI.url).then(response => {
+            console.log(response)
+          })
+        }, interval)
+      }
     }
   }
 }

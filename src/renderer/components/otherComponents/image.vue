@@ -1,5 +1,6 @@
 <template>
   <el-image
+    lazy
     :class="{
       rotate:optionData.rotate,
       heartbeat:optionData.heartbeat

@@ -63,5 +63,28 @@ export default {
                 type: 'cross'
             }
         }
+    },
+    getCommonDataset() {
+        return {
+            // 提供一份数据。
+            source: [
+                ['Mon', 820],
+                ['Tue', 932],
+                ['Wed', 901],
+                ['Thu', 934],
+                ['Fri', 1290],
+                ['Sat', 1330],
+                ['Sun', 1320]
+            ]
+        }
+    },
+    getCommonData() {
+        return {
+            intervalAPI: {
+                use: false,
+                url: '',
+                interval: 60
+            }
+        }
     }
 }

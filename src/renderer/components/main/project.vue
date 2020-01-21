@@ -55,11 +55,8 @@
                 <el-option label="dark" value="dark"></el-option>
                 <el-option label="chalk" value="chalk"></el-option>
                 <el-option label="halloween" value="halloween"></el-option>
-                <el-option label="macarons" value="macarons"></el-option>
-                <el-option label="purple-passion" value="purple-passion"></el-option>
                 <el-option label="vintage" value="vintage"></el-option>
                 <el-option label="westeros" value="westeros"></el-option>
-                <el-option label="wonderland" value="wonderland"></el-option>
               </el-select>
             </el-form-item>
             <el-button class="nav_button" type="primary" size="medium" @click="returnToIndex">返回主页</el-button>
@@ -469,6 +466,7 @@ export default {
       .selected {
         background: rgba(13, 42, 67, 0.5);
         border: 2px dashed white;
+        z-index: 1;
       }
     }
   }

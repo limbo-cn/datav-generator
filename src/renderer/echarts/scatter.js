@@ -1,4 +1,5 @@
 import Common from './common'
+// import merge from 'lodash/merge'
 export default {
     getMockBasicScatter() {
         return {
@@ -8,9 +9,8 @@ export default {
             tooltip: Common.getCommonyTooltip(),
             xAxis: Common.getCommonxAxis(),
             yAxis: Common.getCommonyAxis(),
-            series: [{
-                symbolSize: 20,
-                data: [
+            dataset: {
+                source: [
                     [10.0, 8.04],
                     [8.0, 6.95],
                     [13.0, 7.58],
@@ -22,9 +22,13 @@ export default {
                     [12.0, 10.84],
                     [7.0, 4.82],
                     [5.0, 5.68]
-                ],
+                ]
+            },
+            series: [{
+                symbolSize: 25,
                 type: 'scatter'
-            }]
+            }],
+            data: Common.getCommonData()
         }
     }
 }

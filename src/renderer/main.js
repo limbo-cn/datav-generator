@@ -18,10 +18,7 @@ import './assets/iconfont'
 require('./echarts/theme/vintage')
 require('./echarts/theme/chalk')
 require('./echarts/theme/halloween')
-require('./echarts/theme/macarons')
-require('./echarts/theme/purple-passion')
 require('./echarts/theme/westeros')
-require('./echarts/theme/wonderland')
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
