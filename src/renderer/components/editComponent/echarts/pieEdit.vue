@@ -32,7 +32,7 @@
 </template>
 
  <script>
-import merge from 'lodash/merge'
+import isEqual from 'lodash/isEqual'
 import Pie from '../../../echarts/pie'
 import Title from '../common/chartTitle'
 import Other from '../common/chartOther'
@@ -50,7 +50,9 @@ export default {
     }
   },
   mounted() {
-    merge(this.optionData, this.option)
+    if (this.option) {
+      this.optionData = this.option
+    }
   },
   watch: {
     optionData:
@@ -61,7 +63,9 @@ export default {
       deep: true
     },
     option: function (val) {
-      merge(this.optionData, this.option)
+      if (!isEqual(this.optionData, val)) {
+        this.optionData = val
+      }
     }
   },
   methods: {
