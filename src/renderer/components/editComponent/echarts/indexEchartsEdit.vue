@@ -24,10 +24,10 @@
 </template>
 
  <script>
-import PieEdit from './pieEdit'
-import LineEdit from './lineEdit'
-import BarEdit from './barEdit'
-import ScatterEdit from './scatterEdit'
+import PieEdit from './pie/pieEdit'
+import LineEdit from './line/lineEdit'
+import BarEdit from './bar/barEdit'
+import ScatterEdit from './scatter/scatterEdit'
 
 export default {
   props: ['option'],

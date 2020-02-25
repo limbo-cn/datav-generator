@@ -33,10 +33,10 @@
 
  <script>
 import isEqual from 'lodash/isEqual'
-import Pie from '../../../echarts/pie'
-import Title from '../common/chartTitle'
-import Other from '../common/chartOther'
-import Data from '../common/chartData'
+import Pie from '../../../../echarts/pie'
+import Title from '../../common/chartTitle'
+import Other from '../../common/chartOther'
+import Data from './chartDataPie'
 export default {
   props: ['option'],
   components: {

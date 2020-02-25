@@ -1,11 +1,14 @@
 <template>
   <div>
     <el-tabs tab-position="left" style="height: 238px;">
+      <el-tab-pane label="数据设置">
+        <Data :userdata.sync="optionData.data" :data.sync="optionData.series"></Data>
+      </el-tab-pane>
       <el-tab-pane label="标题设置">
         <Title :title.sync="optionData.title"></Title>
       </el-tab-pane>
       <el-tab-pane label="横坐标设置">
-        <AxisX :xAxis.sync="optionData.xAxis"></AxisX>
+        <AxisX :xAxis.sync="optionData.xAxis" :series.sync="optionData.series"></AxisX>
       </el-tab-pane>
       <el-tab-pane label="纵坐标设置">
         <AxisY :yAxis.sync="optionData.yAxis"></AxisY>
@@ -18,19 +21,21 @@
 </template>
 
  <script>
-import merge from 'lodash/merge'
-import Scatter from '../../../echarts/scatter'
-import Title from '../common/chartTitle'
-import Other from '../common/chartOther'
-import AxisX from '../common/chartAxisX'
-import AxisY from '../common/chartAxisY'
+import isEqual from 'lodash/isEqual'
+import Scatter from '../../../../echarts/scatter'
+import Title from '../../common/chartTitle'
+import Other from '../../common/chartOther'
+import AxisX from '../../common/chartAxisX'
+import AxisY from '../../common/chartAxisY'
+import Data from './chartDataScatter'
 export default {
   props: ['option'],
   components: {
     Title,
     Other,
     AxisX,
-    AxisY
+    AxisY,
+    Data
   },
   data() {
     return {
@@ -38,7 +43,9 @@ export default {
     }
   },
   mounted() {
-    merge(this.optionData, this.option)
+    if (this.option) {
+      this.optionData = this.option
+    }
   },
   watch: {
     optionData:
@@ -49,7 +56,9 @@ export default {
       deep: true
     },
     option: function (val) {
-      merge(this.optionData, this.option)
+      if (!isEqual(this.optionData, val)) {
+        this.optionData = val
+      }
     }
   },
   methods: {

@@ -7,7 +7,7 @@
       class="dialog"
       title="事件列表"
       append-to-body
-      :visible="dialogVisible"
+      :visible.sync="dialogVisible"
       @close="closeDialog"
     >
       <el-table :data="tableData" height="400" style="width: 100%">

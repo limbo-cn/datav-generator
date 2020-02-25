@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-dialog class="dialog" fullscreen title="选择布局" :visible="dialogVisible" @close="closeDialog">
+    <el-dialog
+      class="dialog"
+      fullscreen
+      title="选择布局"
+      :visible.sync="dialogVisible"
+      @close="closeDialog"
+    >
       <div class="flex_wrapper">
         <div class="flex_item" @click="addNewFunc">
           <div class="el-upload">
@@ -40,7 +46,13 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog class="dialog" fullscreen title="编辑布局" :visible="addNew" @close="closeDialogEdit">
+    <el-dialog
+      class="dialog"
+      fullscreen
+      title="编辑布局"
+      :visible.sync="addNew"
+      @close="closeDialogEdit"
+    >
       <div class="layout_edit">
         <div class="grid_wrapper">
           <grid-layout

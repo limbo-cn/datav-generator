@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog class="dialog" title="添加事件" :visible="dialogVisible" @close="closeDialog">
+    <el-dialog class="dialog" title="添加事件" :visible.sync="dialogVisible" @close="closeDialog">
       <el-form label-width="120px">
         <el-form-item label="选择事件">
           <el-select v-model="eventId">

@@ -4,7 +4,7 @@
       class="dialog"
       title="事件编辑"
       append-to-body
-      :visible="dialogVisible"
+      :visible.sync="dialogVisible"
       @close="closeDialog"
     >
       <el-form ref="form" :model="event" label-width="180px">

@@ -117,7 +117,12 @@
         </el-footer>
       </el-container>
     </el-container>
-    <el-dialog title="保存" :visible="dialogSaveVisible" :close-on-click-modal="false" width="60%">
+    <el-dialog
+      title="保存"
+      :visible.sync="dialogSaveVisible"
+      :close-on-click-modal="false"
+      width="60%"
+    >
       <el-image
         style="width:430px;height:270px;left: 50%;margin-left: -215px;"
         fit="scale-down"
