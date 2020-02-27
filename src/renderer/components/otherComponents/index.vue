@@ -8,6 +8,7 @@
     ></MyButton>
     <MyText v-if="options && options.type === 'text'" :option="options.text"></MyText>
     <MyImage v-if="options && options.type === 'image'" :option="options.image"></MyImage>
+    <MyVideo v-if="options && options.type === 'video'" :option="options.video"></MyVideo>
     <MySVG v-if="options && options.type === 'svg'" :option="options.svg"></MySVG>
   </div>
 </template>
@@ -17,6 +18,7 @@ import MySlider from './slider'
 import MyButton from './button'
 import MyText from './text'
 import MyImage from './image'
+import MyVideo from './video'
 import MySVG from './svg'
 
 export default {
@@ -26,6 +28,7 @@ export default {
     MyButton,
     MyText,
     MyImage,
+    MyVideo,
     MySVG
   }
 }

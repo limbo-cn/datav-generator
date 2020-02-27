@@ -21,6 +21,12 @@ export default {
                 defaultLayout: { 'x': 16, 'y': 9, 'w': 3, 'h': 4, 'i': 0 }
             },
             {
+                type: 'video',
+                icon: '#icon-jibenzhexiantu',
+                title: '视频',
+                defaultLayout: { 'x': 16, 'y': 9, 'w': 3, 'h': 4, 'i': 0 }
+            },
+            {
                 type: 'svg',
                 icon: '#icon-jibenzhexiantu',
                 title: 'SVG',
@@ -65,6 +71,20 @@ export default {
             fit: 'fill',
             rotate: false,
             heartbeat: false
+        }
+        let themedOption = {
+            default: {
+
+            }
+        }
+        return merge(basic, themedOption[theme])
+    },
+    getDefaultOptionVideo(theme = 'default') {
+        let basic = {
+            type: 'network',
+            muted: true,
+            loop: true,
+            url: 'https://www.w3school.com.cn/i/movie.ogg'
         }
         let themedOption = {
             default: {

@@ -17,6 +17,12 @@
       :events="options.events"
       @changeOption="changeOption"
     />
+    <MyVideoEdit
+      v-if="options && options.type ==='video'"
+      :option="options.video"
+      :events="options.events"
+      @changeOption="changeOption"
+    />
     <MySVGEdit
       v-if="options && options.type ==='svg'"
       :option="options.svg"
@@ -43,6 +49,7 @@
 import MyChartEdit from './echarts/indexEchartsEdit'
 import MyTextEdit from './textEdit'
 import MyImageEdit from './imageEdit'
+import MyVideoEdit from './videoEdit'
 import MySVGEdit from './svgEdit'
 import MySliderEdit from './sliderEdit'
 import MyButtonEdit from './buttonEdit'
@@ -53,6 +60,7 @@ export default {
     MyChartEdit,
     MyTextEdit,
     MyImageEdit,
+    MyVideoEdit,
     MySVGEdit,
     MySliderEdit,
     MyButtonEdit
