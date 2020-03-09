@@ -2,6 +2,7 @@ import Line from './line'
 import Bar from './bar'
 import Pie from './pie'
 import Scatter from './scatter'
+import Gauge from './gauge'
 
 export default {
     getListData() {
@@ -51,6 +52,18 @@ export default {
                         title: '基本散点图',
                         image: './static/images/scatter-simple.png',
                         option: Scatter.getMockBasicScatter
+                    }
+                ]
+            },
+            {
+                type: 'gauge',
+                icon: '#icon-bingtu',
+                title: '仪表盘',
+                categorys: [
+                    {
+                        title: '基本仪表盘',
+                        image: './static/images/gauge-simple.png',
+                        option: Gauge.getMockBasicGauge
                     }
                 ]
             }

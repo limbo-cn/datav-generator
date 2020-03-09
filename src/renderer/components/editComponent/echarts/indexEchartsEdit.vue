@@ -20,6 +20,11 @@
       :option="option"
       @changeOption="changeOption"
     ></ScatterEdit>
+    <GaugeEdit
+      v-if="option&& option.series[0].type === 'gauge'"
+      :option="option"
+      @changeOption="changeOption"
+    ></GaugeEdit>
   </div>
 </template>
 
@@ -28,6 +33,7 @@ import PieEdit from './pie/pieEdit'
 import LineEdit from './line/lineEdit'
 import BarEdit from './bar/barEdit'
 import ScatterEdit from './scatter/scatterEdit'
+import GaugeEdit from './gauge/gaugeEdit'
 
 export default {
   props: ['option'],
@@ -35,7 +41,8 @@ export default {
     PieEdit,
     LineEdit,
     BarEdit,
-    ScatterEdit
+    ScatterEdit,
+    GaugeEdit
   },
   watch: {
 

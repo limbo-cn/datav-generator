@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :inline="true">
+    <el-form :inline="true" v-if="hasGrid">
       <el-form-item label="图表位置（百分比）：">
         <el-form-item label="距离上边：">
           <el-input-number v-model="option.grid.top"></el-input-number>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  props: ['option'],
+  props: ['option', 'hasGrid'],
   data() {
     return {
 

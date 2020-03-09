@@ -2,23 +2,25 @@
   <div>
     <el-tabs tab-position="left" style="height: 238px;">
       <el-tab-pane label="数据设置">
-        <Data
-          :userdata.sync="optionData.data"
-          :data.sync="optionData.series"
-          :xAxis="optionData.xAxis.data"
-        ></Data>
+        <Data :userdata.sync="optionData.data" :data.sync="optionData.series[0].data"></Data>
+      </el-tab-pane>
+      <el-tab-pane label="图形设置">
+        <el-form :inline="true">
+          <el-form-item label="大小：">
+            <el-input-number
+              :value="parseInt(optionData.series[0].radius)"
+              @change="val=>{optionData.series[0].radius = `${val}%`}"
+              :min="0"
+              :max="100"
+            ></el-input-number>
+          </el-form-item>
+        </el-form>
       </el-tab-pane>
       <el-tab-pane label="标题设置">
         <Title :title.sync="optionData.title"></Title>
       </el-tab-pane>
-      <el-tab-pane label="横坐标设置">
-        <AxisX :xAxis.sync="optionData.xAxis" :series.sync="optionData.series"></AxisX>
-      </el-tab-pane>
-      <el-tab-pane label="纵坐标设置">
-        <AxisY :yAxis.sync="optionData.yAxis"></AxisY>
-      </el-tab-pane>
       <el-tab-pane label="其他设置">
-        <Other :option.sync="optionData" :hasGrid="true"></Other>
+        <Other :option.sync="optionData"></Other>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -26,24 +28,20 @@
 
  <script>
 import isEqual from 'lodash/isEqual'
-import Line from '../../../../echarts/line'
+import Gauge from '../../../../echarts/gauge'
 import Title from '../../common/chartTitle'
 import Other from '../../common/chartOther'
-import AxisX from '../../common/chartAxisX'
-import AxisY from '../../common/chartAxisY'
-import Data from './chartDataline'
+import Data from './chartDataGauge'
 export default {
   props: ['option'],
   components: {
     Title,
     Other,
-    AxisX,
-    AxisY,
     Data
   },
   data() {
     return {
-      optionData: Line.getMockBasicLine()
+      optionData: Gauge.getMockBasicGauge()
     }
   },
   mounted() {

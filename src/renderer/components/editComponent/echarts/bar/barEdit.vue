@@ -18,7 +18,7 @@
         <AxisY :yAxis.sync="optionData.yAxis"></AxisY>
       </el-tab-pane>
       <el-tab-pane label="其他设置">
-        <Other :option.sync="optionData"></Other>
+        <Other :option.sync="optionData" :hasGrid="true"></Other>
       </el-tab-pane>
     </el-tabs>
   </div>
